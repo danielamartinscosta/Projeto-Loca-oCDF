@@ -22,7 +22,44 @@ namespace locacaoProjeto.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var dbContexto = _context.Pedidos.Include(p => p.Carro).Include(p => p.Cliente);
+            var pedidosSql = _context.Pedidos.Join(
+                _context.Clientes,
+                ped => ped.ClienteId,
+                cli => cli.Id,
+                (ped, cli) => new {
+                    PedidoId = ped.Id,
+                    NomeCliente = cli.Nome,
+                    CarroId = ped.CarroId
+                }
+            ).Join(
+                _context.Carros,
+                pedCli => pedCli.CarroId,
+                Carro =>Carro.Id,
+                (pedCli, carro) => new {
+                    PedidoId = pedCli.PedidoId,
+                    NomeCliente = pedCli.NomeCliente,
+                    NomeCarro = carro.Nome,
+                    MarcaId = carro.MarcaId
+                } 
+            ).Join(
+                _context.Marcas,
+                pedCliCarr => pedCliCarr.MarcaId,
+                marca => marca.Id,
+                (pedCliCarr, marca) => new {
+                    PedidoId = pedCliCarr.PedidoId,
+                    NomeCliente = pedCliCarr.NomeCliente,
+                    NomeCarro = pedCliCarr.NomeCarro,
+                    MarcaDoCarro = marca.Nome
+                } 
+            ).ToQueryString();
+
+            Console.WriteLine("================[");
+            Console.WriteLine(pedidosSql);
+            Console.WriteLine("]================");
+
+
+
+            var dbContexto = _context.Pedidos.Include(p => p.Carro).Include(p => p.Cliente).Include(p => p.Carro.Marca);
             return View(await dbContexto.ToListAsync());
         }
 
@@ -49,8 +86,8 @@ namespace locacaoProjeto.Controllers
         // GET: Pedidos/Create
         public IActionResult Create()
         {
-            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Id");
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id");
+            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Nome");
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome");
             return View();
         }
 
@@ -59,16 +96,20 @@ namespace locacaoProjeto.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ClienteId,CarroId,DataLocacao,DataEntrega")] Pedido pedido)
+        public async Task<IActionResult> Create([Bind("Id,ClienteId,CarroId,DataLocacao")] Pedido pedido)
         {
             if (ModelState.IsValid)
             {
+                var config = _context.Configuracoes.FirstOrDefault();
+                var dias = config is not null ? config.DiasDeLocacao : 1;
+
+                pedido.DataEntrega = pedido.DataLocacao.AddDays(dias);
                 _context.Add(pedido);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Id", pedido.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id", pedido.ClienteId);
+            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Nome", pedido.CarroId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome", pedido.ClienteId);
             return View(pedido);
         }
 
@@ -85,8 +126,8 @@ namespace locacaoProjeto.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Id", pedido.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id", pedido.ClienteId);
+            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Nome", pedido.CarroId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome", pedido.ClienteId);
             return View(pedido);
         }
 
@@ -122,8 +163,8 @@ namespace locacaoProjeto.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Id", pedido.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Id", pedido.ClienteId);
+            ViewData["CarroId"] = new SelectList(_context.Carros, "Id", "Nome", pedido.CarroId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome", pedido.ClienteId);
             return View(pedido);
         }
 

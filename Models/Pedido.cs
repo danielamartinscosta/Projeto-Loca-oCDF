@@ -15,7 +15,7 @@ namespace locacaoProjeto.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; } = default!;
 
-        [Display(Name = "Código_Cliente")]
+        [Display(Name = "Cliente")]
         [Column("ClienteId")]
         public int ClienteId { get; set; } = default!;
 

@@ -49,8 +49,8 @@ namespace locacaoProjeto.Controllers
         // GET: Carros/Create
         public IActionResult Create()
         {
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id");
-            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Id");
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nome");
+            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Nome");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace locacaoProjeto.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id", carro.MarcaId);
-            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Id", carro.ModeloId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nome", carro.MarcaId);
+            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Nome", carro.ModeloId);
             return View(carro);
         }
 
@@ -85,8 +85,8 @@ namespace locacaoProjeto.Controllers
             {
                 return NotFound();
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id", carro.MarcaId);
-            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Id", carro.ModeloId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nome", carro.MarcaId);
+            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Nome", carro.ModeloId);
             return View(carro);
         }
 
@@ -122,8 +122,8 @@ namespace locacaoProjeto.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Id", carro.MarcaId);
-            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Id", carro.ModeloId);
+            ViewData["MarcaId"] = new SelectList(_context.Marcas, "Id", "Nome", carro.MarcaId);
+            ViewData["ModeloId"] = new SelectList(_context.Modelos, "Id", "Nome", carro.ModeloId);
             return View(carro);
         }
 

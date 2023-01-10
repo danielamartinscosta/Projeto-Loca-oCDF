@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.Carro)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Carro.Marca)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.DataLocacao)
             </th>
             <th>
@@ -28,26 +31,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cliente.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Carro.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataLocacao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataEntrega)
-            </td>
-            <td>
-                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Listar</a> |
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Carro.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Carro.Marca.Nome)
+                </td>
+                <td>
+                    @item.DataLocacao.ToString("dd/MM/yyy")
+                </td>
+                <td>
+                    @item.DataEntrega.ToString("dd/MM/yyy")
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Listar</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

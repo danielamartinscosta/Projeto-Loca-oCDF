@@ -18,5 +18,14 @@ namespace locacaoProjeto.Models
         [Display(Name = "Nome")]
         [Column("Nome")]
         public string Nome { get; set; } = default!;
+
+        [Display(Name = "Marca")]
+        [Column("MarcaId")]
+        public int MarcaId { get; set; } = default!;
+
+        public Marca? Marca { get; set; }
+
+
+
     }
 }
