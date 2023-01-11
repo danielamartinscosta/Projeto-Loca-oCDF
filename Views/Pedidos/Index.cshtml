@@ -1,6 +1,7 @@
 @model IEnumerable<locacaoProjeto.Models.Pedido>
-
+@using locacao_veiculos.ModelViews;
 @{
+
     ViewData["Title"] = "Index";
 }
 
@@ -13,46 +14,52 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Cliente)
+                Clientes
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Carro)
+                Carro
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Carro.Marca)
+                Marca
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataLocacao)
+                Modelo
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataEntrega)
+                Data de Locação
+            </th>
+            <th>
+                Data de Entrega
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (PedidoResumido pedido in ViewBag.pedidos)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                    @pedido.NomeCliente
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Carro.Nome)
+                    @pedido.NomeCarro
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Carro.Marca.Nome)
+                    @pedido.MarcaDoCarro
                 </td>
                 <td>
-                    @item.DataLocacao.ToString("dd/MM/yyy")
+                    @pedido.ModeloDoCarro
                 </td>
                 <td>
-                    @item.DataEntrega.ToString("dd/MM/yyy")
+                    @pedido.DataLocacaoPedido.ToString("dd/MM/yyy")
                 </td>
                 <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Listar</a> |
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                    @pedido.DataEntregaPedido.ToString("dd/MM/yyy")
+                </td>
+                <td>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@pedido.PedidoId">Editar</a> |
+                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@pedido.PedidoId">Listar</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@pedido.PedidoId">Deletar</a>
                 </td>
             </tr>
         }
