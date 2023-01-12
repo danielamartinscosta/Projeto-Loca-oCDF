@@ -26,6 +26,14 @@ namespace locacaoProjeto.Controllers
             return View(await dbContexto.ToListAsync());
         }
 
+        //criando uma rota de uma api básica
+        [Route("/modelos.json")]
+        public async Task<IActionResult> JsonFiltradoMarca(int marcaId)
+        {
+            var DbContext = _context.Modelos.Where(m => m.MarcaId == marcaId);
+            return StatusCode(200, await DbContext.ToListAsync());
+        }
+
         // GET: Modelos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
